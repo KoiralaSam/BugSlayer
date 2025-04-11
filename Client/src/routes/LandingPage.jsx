@@ -1,7 +1,10 @@
-import React from "react"
-
+import NavBar from "../components/NavBar"
 function LandingPage() {
-  return <div className="bg-red-300">LandingPage</div>
+  return (
+    <div className="">
+      <NavBar />
+    </div>
+  )
 }
 
 export default LandingPage
