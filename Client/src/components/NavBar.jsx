@@ -2,14 +2,16 @@ import React from "react"
 
 function NavBar() {
   return (
-    <div>
-      <h1>Logo</h1>
+    <div className="flex items-center justify-between bg-red-200 p-4">
+      <div className="flex items-center">
+        <h1 className="text-3xl font-semibold">BookShare</h1>
 
-      <nav>
-        <li>Shop</li>
-        <li>Sell</li>
-        <li>About Us</li>
-      </nav>
+        <nav className="">
+          <a>Shop</a>
+          <a>Sell</a>
+          <a>About Us</a>
+        </nav>
+      </div>
 
       <button>Sign Up</button>
     </div>
