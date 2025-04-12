@@ -1,25 +1,25 @@
-import React from "react";
-import { Fragment } from "react";
-import { useContext, useState } from "react";
-import { UserContext } from "../Context/UserContext";
-import { FaRegEyeSlash } from "react-icons/fa";
-import { FaEye } from "react-icons/fa";
-import { ShowLogin } from "../Context/ShowLogin.jsx";
+import React from "react"
+import { Fragment } from "react"
+import { useContext, useState } from "react"
+import { UserContext } from "../Context/UserContext"
+import { FaRegEyeSlash } from "react-icons/fa"
+import { FaEye } from "react-icons/fa"
+import { ShowLogin } from "../Context/ShowLogin.jsx"
 
-import axios from "axios";
+import axios from "axios"
 
 const SignIn = () => {
-  const { showLogin, setShowLogin } = useContext(ShowLogin);
-  const [visible, setVisible] = useState(false);
-  const { currentUser, dispatchUser } = useContext(UserContext);
+  const { showLogin, setShowLogin } = useContext(ShowLogin)
+  const [visible, setVisible] = useState(false)
+  const { currentUser, dispatchUser } = useContext(UserContext)
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const data = {
       email: event.target.email.value,
       password: event.target.password.value,
-    };
-    console.log(data);
+    }
+    console.log(data)
     axios({
       url: "http://localhost:3000/user/login",
       method: "POST",
@@ -29,21 +29,21 @@ const SignIn = () => {
       data: data,
     })
       .then((res) => {
-        dispatchUser({ type: "saveUser", payload: res.data });
-        setShowLogin(!showLogin);
+        dispatchUser({ type: "saveUser", payload: res.data })
+        setShowLogin(!showLogin)
       })
       .catch((error) => {
-        console.log(error.response?.data || error.message);
-      });
-  };
+        console.log(error.response?.data || error.message)
+      })
+  }
 
   const handleVisibility = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
   return (
     <Fragment>
       <form
-        className="max-w-max p-6 rounded-2xl bg-gray-200 text-sm m-3"
+        className="max-w-max p-6 rounded-2xl bg-gray-200 text-sm m-3 z-10"
         onSubmit={handleSubmit}
       >
         <table className="w-full border-separate border-spacing-2">
@@ -102,6 +102,6 @@ const SignIn = () => {
         </div>
       </form>
     </Fragment>
-  );
-};
-export default SignIn;
+  )
+}
+export default SignIn

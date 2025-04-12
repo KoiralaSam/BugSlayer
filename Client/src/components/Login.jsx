@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { FaXmark } from "react-icons/fa6";
-import { useContext } from "react";
-import { ShowLogin } from "../Context/ShowLogin.jsx";
-import SignUp from "./SignUp";
-import SignIn from "./SignIn";
+import { useState } from "react"
+import { FaXmark } from "react-icons/fa6"
+import { useContext } from "react"
+import { ShowLogin } from "../Context/ShowLogin.jsx"
+import SignUp from "./SignUp"
+import SignIn from "./SignIn"
 const LoginPage = () => {
-  const { showLogin, setShowLogin } = useContext(ShowLogin);
-  const [signup, setSignup] = useState(false);
+  const { showLogin, setShowLogin } = useContext(ShowLogin)
+  const [signup, setSignup] = useState(false)
   const handleSignup = () => {
-    setSignup(!signup);
-  };
+    setSignup(!signup)
+  }
   return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 bg-[rgb(0,0,0,.5)] flex justify-center items-center">
+    <div className="absolute top-0 left-0 right-0 bottom-0 bg-[rgb(0,0,0,.5)] flex justify-center items-center z-10">
       <div className="w-[500px] h-[650px] bg-gray-400 rounded-2xl p-6">
         <div className="flex justify-end">
           <FaXmark
@@ -67,7 +67,7 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage
