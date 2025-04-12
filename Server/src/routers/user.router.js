@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 import mongoose from "mongoose";
+=======
+<<<<<<< HEAD
+=======
+import mongoose from "mongoose";
+>>>>>>> ce5d6d8af205c401e3116294b573c04110218520
+>>>>>>> master
 import express from "express";
 import { User } from "../models/user.js";
 import sharp from "sharp";
@@ -19,9 +26,22 @@ const upload = multer({
 router.post("/user", async (req, res) => {
   const user = new User(req.body);
   try {
+<<<<<<< HEAD
     await user.save();
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
+=======
+<<<<<<< HEAD
+    console.log(req.body);
+    await user.save();
+    const token = await user.generateAuthToken();
+    res.status(201).send({ token });
+=======
+    await user.save();
+    const token = await user.generateAuthToken();
+    res.status(201).send({ user, token });
+>>>>>>> ce5d6d8af205c401e3116294b573c04110218520
+>>>>>>> master
   } catch (e) {
     res.status(400).send(e);
   }
@@ -34,7 +54,15 @@ router.post("/user/login", async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
+<<<<<<< HEAD
     res.send({ user, token });
+=======
+<<<<<<< HEAD
+    res.send({ token });
+=======
+    res.send({ user, token });
+>>>>>>> ce5d6d8af205c401e3116294b573c04110218520
+>>>>>>> master
   } catch (error) {
     res.status(400).send(error);
   }
@@ -67,7 +95,15 @@ router.patch("/users/me", auth, async (req, res) => {
     });
     await req.user.save();
 
+<<<<<<< HEAD
     res.send(req.user);
+=======
+<<<<<<< HEAD
+    res.status(200).send();
+=======
+    res.send(req.user);
+>>>>>>> ce5d6d8af205c401e3116294b573c04110218520
+>>>>>>> master
   } catch (e) {
     res.status(500).send(e);
   }
@@ -91,3 +127,10 @@ router.post(
     res.status(400).send({ error: error.message });
   }
 );
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+export default router;
+=======
+>>>>>>> ce5d6d8af205c401e3116294b573c04110218520
+>>>>>>> master

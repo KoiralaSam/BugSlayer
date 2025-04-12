@@ -1,4 +1,8 @@
 import express from "express";
+<<<<<<< HEAD
+=======
+import multer from "multer";
+>>>>>>> master
 const router = new express.Router();
 import { Book } from "../models/book.js";
 import { auth } from "../middleware/auth.js";
@@ -74,3 +78,8 @@ router.patch("/book/:id", auth, async (req, res) => {
     res.status(500).send(e);
   }
 });
+<<<<<<< HEAD
+=======
+
+export default router;
+>>>>>>> master

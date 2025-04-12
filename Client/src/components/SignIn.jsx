@@ -1,44 +1,27 @@
-<<<<<<< HEAD
-import { FaXmark } from "react-icons/fa6"
-
-function SignUp({ setShowSignUp }) {
-  return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 bg-[rgb(0,0,0,.5)] flex justify-center items-center z-10">
-      <div className="w-[500px] h-[600px] bg-white rounded-2xl p-6">
-        <div className="flex justify-end">
-          <FaXmark
-            size={20}
-            className="cursor-pointer"
-            onClick={() => setShowSignUp(false)}
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default SignUp
-=======
-import React, { Fragment, useContext, useState } from "react";
-import { UserContext } from "../Context/UserContext.jsx";
-import { FaRegEyeSlash, FaEye } from "react-icons/fa";
+import React from "react";
+import { Fragment } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../Context/UserContext";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import { ShowLogin } from "../Context/ShowLogin.jsx";
+
 import axios from "axios";
 
-const SignUp = () => {
+const SignIn = () => {
   const { showLogin, setShowLogin } = useContext(ShowLogin);
   const [visible, setVisible] = useState(false);
-  const { dispatchUser } = useContext(UserContext);
+  const { currentUser, dispatchUser } = useContext(UserContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = {
-      name: event.target.name.value,
       email: event.target.email.value,
       password: event.target.password.value,
     };
+    console.log(data);
     axios({
-      url: "http://localhost:3000/user",
+      url: "http://localhost:3000/user/login",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +29,6 @@ const SignUp = () => {
       data: data,
     })
       .then((res) => {
-        console.log(res);
         dispatchUser({ type: "saveUser", payload: res.data });
         setShowLogin(!showLogin);
       })
@@ -58,7 +40,6 @@ const SignUp = () => {
   const handleVisibility = () => {
     setVisible(!visible);
   };
-
   return (
     <Fragment>
       <form
@@ -67,22 +48,6 @@ const SignUp = () => {
       >
         <table className="w-full border-separate border-spacing-2">
           <tbody>
-            <tr className="m-2">
-              <td className="pr-4">
-                <label htmlFor="name" className="font-medium">
-                  Name:
-                </label>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  required
-                  className="border border-gray-300 rounded-xl h-10 p-2 w-full"
-                />
-              </td>
-            </tr>
             <tr className="m-2">
               <td className="pr-4">
                 <label htmlFor="email" className="font-medium">
@@ -94,13 +59,11 @@ const SignUp = () => {
                   type="text"
                   name="email"
                   id="email"
-                  required
                   className="border border-gray-300 rounded-xl h-10 p-2 w-full"
                 />
               </td>
             </tr>
-
-            <tr className="m-3">
+            <tr className="m-2">
               <td className="pr-4">
                 <label htmlFor="password" className="font-medium">
                   Password:
@@ -129,18 +92,16 @@ const SignUp = () => {
             </tr>
           </tbody>
         </table>
-        <div className="mt-4">
+        <div className="my-2">
           <button
             type="submit"
             className=" text-white border-1 rounded-xl bg-[#00AFF5] w-[160px] m-2 py-2 hover:bg-[#30C5FF]"
           >
-            Sign Up
+            Sign In
           </button>
         </div>
       </form>
     </Fragment>
   );
 };
-
-export default SignUp;
->>>>>>> master
+export default SignIn;

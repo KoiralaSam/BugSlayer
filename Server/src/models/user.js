@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+<<<<<<< HEAD
 import { book } from "./book";
 import jwt from "jsonwebtoken";
 
+=======
+import jwt from "jsonwebtoken";
+import { Book } from "./book";
+>>>>>>> master
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
