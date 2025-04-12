@@ -1,8 +1,8 @@
-import mongoose from "mongoose"
-import validator from "validator"
-import bcrypt from "bcryptjs"
-import { Book } from "./book.js"
-import jwt from "jsonwebtoken"
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+import { Book } from "./book.js";
+import jwt from "jsonwebtoken";
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate(value) {
       if (!validator.isEmail(value)) {
-        throw new Error("Email must be right format")
+        throw new Error("Email must be right format");
       }
     },
   },
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     minLength: 5,
     validate(value) {
       if (value.toLowerCase() === "password") {
-        throw new Error("Password cannot be password")
+        throw new Error("Password cannot be password");
       }
     },
   },
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: Buffer,
   },
-})
+});
 
 userSchema.virtual(
   "books",
@@ -58,47 +58,53 @@ userSchema.virtual(
   {
     timestamps: true,
   }
-)
+);
 
 userSchema.methods.generateAuthToken = async function () {
-  const user = this
-  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SIGN_KEY)
-  user.tokens = user.tokens.concat({ token })
-  await user.save()
-  return token
-}
+  const user = this;
+  const token = jwt.sign(
+    { _id: user._id.toString() },
+    process.env.JWT_SIGN_KEY,
+    {
+      expiresIn: "7d",
+    }
+  );
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+  return token;
+};
 
 userSchema.methods.toJSON = function () {
-  const user = this
-  const userObject = user.toObject()
+  const user = this;
+  const userObject = user.toObject();
 
-  delete userObject.password
-  delete userObject.tokens
-  delete userObject.avatar
+  delete userObject.password;
+  delete userObject.tokens;
+  delete userObject.avatar;
 
-  return userObject
-}
+  return userObject;
+};
 
 userSchema.statics.findByCredentials = async function (email, password) {
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email });
   if (!user) {
-    throw new Error("User not found")
+    throw new Error("User not found");
   }
 
-  const isMatch = await bcrypt.compare(password, user.password)
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error("Invalid credentials")
+    throw new Error("Invalid credentials");
   }
-  return user
-}
+  return user;
+};
 
 userSchema.pre("save", async function (next) {
-  const user = this
+  const user = this;
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 8)
+    user.password = await bcrypt.hash(user.password, 8);
   }
-  next()
-})
+  next();
+});
 
-const User = mongoose.model("User", userSchema)
-export { User }
+const User = mongoose.model("User", userSchema);
+export { User };
