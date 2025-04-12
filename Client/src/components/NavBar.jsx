@@ -4,6 +4,7 @@ import { UserContext } from "../Context/UserContext.jsx"
 import { ShowLogin } from "../Context/ShowLogin.jsx"
 import { Link } from "react-router"
 import LoginPage from "./LoginPage.jsx"
+import { CiSearch } from "react-icons/ci"
 
 function NavBar() {
   const { currentUser, dispatchUser } = useContext(UserContext)
@@ -40,6 +41,16 @@ function NavBar() {
           </p>
         </nav>
       </div>
+      {window.location.pathname !== "/" && (
+        <div className="flex items-center">
+          <CiSearch className="mr-[-30px]" size={20} />
+          <input
+            type="text"
+            className="border-1  border-gray-400 rounded-2xl text-md px-4 py-1.5 pl-10 w-[300px]"
+            placeholder="Search Books..."
+          />
+        </div>
+      )}
 
       <button
         onClick={handleClick}
