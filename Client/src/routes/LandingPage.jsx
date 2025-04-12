@@ -1,6 +1,6 @@
-import book from "../../asset/bookbg.avif";
-import { Outlet } from "react-router";
-import NavBar from "../components/NavBar";
+import book from "../../asset/bookbg.avif"
+import { Outlet } from "react-router"
+import NavBar from "../components/NavBar"
 function LandingPage() {
   return (
     <div
@@ -14,7 +14,7 @@ function LandingPage() {
             Give Books a <br />
             Second Life
           </h1>
-          <p className="w-[600px] mt-50">
+          <p className="w-[600px] mt-14">
             Our platform connects book lovers who want to recycle, donate, or
             exchange their pre-loved books. Whether you’re clearing your shelf
             or hunting for your next great read, we make it easy to give books a
@@ -23,7 +23,7 @@ function LandingPage() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default LandingPage;
+export default LandingPage
