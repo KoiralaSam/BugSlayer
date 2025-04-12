@@ -6,7 +6,7 @@ import SignUp from "./SignUp.jsx"
 function NavBar() {
   const [showSignUp, setShowSignUp] = useState(false)
   return (
-    <div className="flex items-center justify-between p-4 border-b-2 border-gray-300 z-4">
+    <div className="flex items-center justify-between p-4">
       <div className="flex items-baseline gap-16">
         <h1 className="text-3xl font-semibold">
           <Link to="/">
