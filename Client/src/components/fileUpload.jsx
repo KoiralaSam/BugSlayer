@@ -1,54 +1,56 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
+
+import { FaRegFileImage } from "react-icons/fa"
 
 const FileUpload = () => {
-  const [file, setFile] = useState(null);
-  const [dragActive, setDragActive] = useState(false);
-  const [error, setError] = useState("");
+  const [file, setFile] = useState(null)
+  const [dragActive, setDragActive] = useState(false)
+  const [error, setError] = useState("")
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (!selectedFile) return;
+    const selectedFile = e.target.files[0]
+    if (!selectedFile) return
 
     if (
       selectedFile.type !==
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
-      setError("Only DOCX files are allowed.");
-      setFile(null);
+      setError("Only DOCX files are allowed.")
+      setFile(null)
     } else {
-      setFile(selectedFile);
-      setError("");
+      setFile(selectedFile)
+      setError("")
     }
-  };
+  }
 
   const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
+    e.preventDefault()
+    setDragActive(true)
+  }
 
   const handleDragLeave = () => {
-    setDragActive(false);
-  };
+    setDragActive(false)
+  }
 
   const handleDrop = (e) => {
-    e.preventDefault();
-    setDragActive(false);
-    const droppedFile = e.dataTransfer.files[0];
+    e.preventDefault()
+    setDragActive(false)
+    const droppedFile = e.dataTransfer.files[0]
     if (droppedFile) {
-      handleFileChange({ target: { files: [droppedFile] } });
+      handleFileChange({ target: { files: [droppedFile] } })
     }
-  };
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!file) {
-      setError("Please select a DOCX file before submitting.");
-      return;
+      setError("Please select a DOCX file before submitting.")
+      return
     }
 
-    console.log("Uploading:", file);
+    console.log("Uploading:", file)
     // You'd normally send the file to a backend here
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto mt-10 p-6">
@@ -59,22 +61,25 @@ const FileUpload = () => {
         className={`border-4 ${
           dragActive ? "border-blue-500" : "border-dashed border-gray-400"
         } 
-          p-10 rounded-xl text-center bg-gray-100 shadow-inner transition-all duration-300 font-semibold`}
+          p-10 rounded-xl text-center bg-gray-100 shadow-inner transition-all duration-300 font-semibold h-[250px]`}
       >
-        <img
+        <FaRegFileImage className="mx-auto mb-4 w-14" size={30} />
+        {/* <img
           src="https://img.icons8.com/ios/100/rocket--v1.png"
           alt="Upload Icon"
           className="mx-auto mb-4 w-14"
-        />
-        <p className="text-gray-800 text-lg font-bold">Drag a file here, or</p>
+        /> */}
+        <p className="text-gray-800 text-lg font-bold">
+          Drag an image here, or
+        </p>
         <label
           htmlFor="file-upload"
           className="text-red-700 font-extrabold cursor-pointer hover:underline uppercase"
         >
-          Choose a file to upload
+          Choose an image to upload
         </label>
         <p className="text-xs text-gray-600 mt-1 font-medium">
-          File permitted: DOCX
+          File permitted: jpg, png
         </p>
         <input
           id="file-upload"
@@ -94,7 +99,7 @@ const FileUpload = () => {
         </div>
       )}
 
-      <div className="flex justify-end mt-6">
+      <div className="flex justify-center mt-6">
         <button
           type="submit"
           className="bg-amber-400 hover:bg-amber-800 text-white font-bold uppercase px-5 py-2 rounded shadow-lg tracking-wide transition-all"
@@ -103,7 +108,7 @@ const FileUpload = () => {
         </button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default FileUpload;
+export default FileUpload

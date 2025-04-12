@@ -34,14 +34,14 @@ function NavBar() {
             <Link to="/shop">Shop</Link>
           </p>
           <p className="font-semibold cursor-pointer hover:underline underline-offset-6">
-            <Link to="/shop">Sell</Link>
+            <Link to="/sell">Sell</Link>
           </p>
           <p className="font-semibold cursor-pointer hover:underline underline-offset-6">
             <Link to="/shop">About Us</Link>
           </p>
         </nav>
       </div>
-      {window.location.pathname !== "/" && (
+      {window.location.pathname === "/shop" && (
         <div className="flex items-center">
           <CiSearch className="mr-[-30px]" size={20} />
           <input
