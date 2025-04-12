@@ -6,10 +6,12 @@ import LandingPage from "./routes/LandingPage"
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/shop" element={<Shop />} />
-    </Routes>
+    <div className="font-roboto text-gray-700">
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/shop" element={<Shop />} />
+      </Routes>
+    </div>
   )
 }
 

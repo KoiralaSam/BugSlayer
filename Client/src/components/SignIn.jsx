@@ -43,30 +43,29 @@ const SignIn = () => {
   return (
     <Fragment>
       <form
-        className="max-w-max p-6 rounded-2xl bg-gray-200 text-sm m-3 z-10"
+        className="max-w-full p-6 pl-4 rounded-2xl text-sm m-3 z-10"
         onSubmit={handleSubmit}
       >
         <table className="w-full border-separate border-spacing-2">
           <tbody>
             <tr className="m-2">
               <td className="pr-4">
-                <label htmlFor="email" className="font-medium">
-                  Email:
+                <label htmlFor="email" className="font-semibold text-lg">
+                  Email
                 </label>
               </td>
               <td>
                 <input
                   type="text"
                   name="email"
-                  id="email"
-                  className="border border-gray-300 rounded-xl h-10 p-2 w-full"
+                  className="border border-gray-600 rounded-xl px-4 py-3 w-full"
                 />
               </td>
             </tr>
             <tr className="m-2">
               <td className="pr-4">
-                <label htmlFor="password" className="font-medium">
-                  Password:
+                <label htmlFor="password" className="font-semibold text-lg">
+                  Password
                 </label>
               </td>
               <td className="relative">
@@ -75,7 +74,7 @@ const SignIn = () => {
                   name="password"
                   id="password"
                   required
-                  className="border border-gray-300 rounded-xl h-10 p-2 w-full pr-10"
+                  className="border border-gray-600 rounded-xl px-4 py-3 w-full"
                 />
                 {!visible ? (
                   <FaEye
@@ -92,10 +91,10 @@ const SignIn = () => {
             </tr>
           </tbody>
         </table>
-        <div className="my-2">
+        <div className="my-2 flex justify-center">
           <button
             type="submit"
-            className=" text-white border-1 rounded-xl bg-[#00AFF5] w-[160px] m-2 py-2 hover:bg-[#30C5FF]"
+            className=" text-white rounded-xl bg-red-500 w-[50%] text-lg m-2 py-2 hover:bg-red-400 cursor-pointer"
           >
             Sign In
           </button>
