@@ -24,7 +24,6 @@ const reducer = (state, { type, payload }) => {
 
 const fetchUserData = async (token) => {
   try {
-    console.log("Token being sent in Authorization header:", `Bearer ${token}`); // Debugging
     const res = await axios({
       url: "http://localhost:3000/user/me",
       method: "GET",
@@ -34,7 +33,7 @@ const fetchUserData = async (token) => {
       },
     });
     console.log("User data response:", res.data); // Debugging
-    return res.data;
+    return res.data; // Includes recommended books
   } catch (error) {
     console.error(
       "Error in fetchUserData:",

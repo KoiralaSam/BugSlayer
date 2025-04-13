@@ -3,6 +3,12 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import { Book } from "./book.js";
 import jwt from "jsonwebtoken";
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -25,6 +31,13 @@ const userSchema = new mongoose.Schema({
     },
   },
 
+  recommended: [
+    {
+      type: mongoose.Schema.Types.ObjectId, // Reference to the Book model
+      ref: "Book",
+    },
+  ],
+
   password: {
     type: String,
     required: true,
@@ -35,6 +48,7 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+
   tokens: [
     {
       token: {
@@ -103,6 +117,70 @@ userSchema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+  next();
+});
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  // Check if the user data has been modified
+  if (user.isModified()) {
+    try {
+      // Fetch all books from the database
+      const allBooks = await Book.find();
+
+      // Format the book data for the OpenAI prompt
+      const bookList = allBooks
+        .map(
+          (book) => `${book.title} by ${book.author} (${book.genre.join(", ")})`
+        )
+        .join("\n");
+
+      // Create a prompt for OpenAI
+      const prompt = `
+        Based on the following list of books:
+        ${bookList}
+
+        Recommend 5 books for a user named "${user.name}" who has interacted with books in the past. For each recommendation, provide the following details in JSON format:
+        - Title
+        - Author
+      `;
+
+      // Send the prompt to OpenAI
+      const response = await client.chat.completions.create({
+        model: "gpt-4",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 500,
+      });
+
+      // Parse the response from OpenAI
+      const recommendations = JSON.parse(response.choices[0]?.message?.content);
+
+      // Find the recommended books in the database
+      const recommendedBooks = [];
+      for (const rec of recommendations) {
+        const book = allBooks.find(
+          (b) =>
+            b.title.toLowerCase() === rec.title.toLowerCase() &&
+            b.author.toLowerCase() === rec.author.toLowerCase()
+        );
+
+        if (book) {
+          recommendedBooks.push(book._id); // Add the book's ObjectId to the recommended array
+        }
+      }
+
+      // Update the user's recommended array
+      user.recommended = recommendedBooks;
+    } catch (error) {
+      console.error(
+        "Error generating recommendations with OpenAI:",
+        error.message
+      );
+      // You can choose to proceed without recommendations if there's an error
+    }
+  }
+
   next();
 });
 

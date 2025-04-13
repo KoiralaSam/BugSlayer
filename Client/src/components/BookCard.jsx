@@ -1,8 +1,8 @@
-import Book from "../../asset/bookbg.jpg"
-import { FaShoppingCart } from "react-icons/fa"
+import Book from "../../asset/bookbg.jpg";
+import { FaShoppingCart } from "react-icons/fa";
 
 function BookCard({ book }) {
-  const { title, author, synopsis, price } = book
+  const { title, author, synopsis, price } = book;
   return (
     <div className="w-fit p-2 shadow-xl rounded-2xl bg-gray-200 flex flex-col h-full">
       <img
@@ -37,7 +37,7 @@ function BookCard({ book }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default BookCard
+export default BookCard;

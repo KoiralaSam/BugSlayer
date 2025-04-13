@@ -1,6 +1,6 @@
-import book from "../../asset/bookbg.avif"
-import { Outlet } from "react-router"
-import NavBar from "../components/NavBar"
+import book from "../../asset/bookbg.avif";
+import { Outlet } from "react-router";
+import NavBar from "../components/NavBar";
 function LandingPage() {
   return (
     <div
@@ -23,7 +23,7 @@ function LandingPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-export default LandingPage
+export default LandingPage;
