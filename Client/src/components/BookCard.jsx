@@ -1,27 +1,29 @@
-import Book from "../../asset/bookbg.jpg";
-import { FaShoppingCart } from "react-icons/fa";
+import Book from "../../asset/bookbg.jpg"
+import { FaShoppingCart } from "react-icons/fa"
 
 function BookCard({ book }) {
-  const { title, author, synopsis, price, avatar } = book;
+  const { title, author, synopsis, userPrice, avatar } = book
   return (
-    <div className="w-fit p-2 shadow-xl rounded-2xl bg-gray-200 flex flex-col h-full">
+    <div className="w-fit p-2 shadow-xl rounded-2xl bg-gray-200 flex flex-col h-[400px]">
       {avatar ? (
         <img
           src={avatar}
           alt={`${title} cover`}
-          className="w-full h-40 object-cover mt-2"
+          className="w-full h-40 object-cover mt-2 rounded-tr-2xl rounded-tl-2xl"
         />
       ) : (
         <p className="text-gray-400 italic">No image available</p>
       )}
       <div className="m-2 flex flex-col items-between h-full">
-        <div>
-          <div className="flex items-center justify-between">
-            <p className="text-3xl font-bold">{title}</p>
-            {price == 0 ? (
-              <p className="text-lg text-green-600">Free</p>
+        <div className="flex flex-col h-full">
+          <div className="flex items-center justify-between w-full">
+            <p className="text-xl font-bold  w-[60%]">{title}</p>
+            {userPrice == 0 ? (
+              <p className="text-lg text-green-600 w-[40%] text-right">Free</p>
             ) : (
-              <p className="text-lg text-green-600">${price}</p>
+              <p className="text-lg text-green-600 w-[40%] text-right">
+                ${userPrice}
+              </p>
             )}
           </div>
 
@@ -41,7 +43,7 @@ function BookCard({ book }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default BookCard;
+export default BookCard

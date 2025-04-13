@@ -4,6 +4,7 @@ import "./App.css"
 import Shop from "./routes/shop"
 import LandingPage from "./routes/LandingPage"
 import Sell from "./routes/Sell"
+import MyCart from "./routes/MyCart"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/sell" element={<Sell />} />
+        <Route path="/mycart" element={<MyCart />} />
       </Routes>
     </div>
   )

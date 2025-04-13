@@ -1,12 +1,14 @@
-import React from "react"
+import React, { useState } from "react"
 import { useContext } from "react"
 import { UserContext } from "../Context/UserContext.jsx"
 import { ShowLogin } from "../Context/ShowLogin.jsx"
 import { Link } from "react-router"
 import LoginPage from "./LoginPage.jsx"
 import { CiSearch } from "react-icons/ci"
+import UserAvatar from "../../asset/userAvatar.avif"
 
 function NavBar() {
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const { currentUser, dispatchUser } = useContext(UserContext)
   const { showLogin, setShowLogin } = useContext(ShowLogin)
 
@@ -51,13 +53,38 @@ function NavBar() {
           />
         </div>
       )}
+      {currentUser ? (
+        <div
+          className="w-10 h-10 bg-cover rounded-4xl cursor-pointer relative"
+          onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+          style={{ backgroundImage: `url(${UserAvatar})` }}
+        >
+          {showProfileDropdown && (
+            <div className="w-[150px] h-fit bg-white absolute right-0 top-12 rounded-2xl flex flex-col items-center z-100">
+              <button className="text-center w-[90%] cursor-pointer py-2 hover:text-red-400">
+                Profile
+              </button>
+              <button className="text-center w-[90%] border-t-1 border-gray-300 cursor-pointer py-2 hover:text-red-400">
+                <Link to="/mycart"> My Cart</Link>
+              </button>
+              <button
+                onClick={handleClick}
+                className="text-center w-[90%] border-t-1 border-gray-300 cursor-pointer py-1 hover:text-red-400"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <button
+          onClick={handleClick}
+          className="bg-red-400 font-semibold text-lg px-4 py-1 rounded-2xl text-white shadow-lg cursor-pointer"
+        >
+          Login
+        </button>
+      )}
 
-      <button
-        onClick={handleClick}
-        className="bg-red-500 font-semibold py-2 px-6 text-lg text-white rounded-2xl hover:shadow-2xl cursor-pointer"
-      >
-        {currentUser ? "Logout" : "Login"}
-      </button>
       {showLogin && <LoginPage />}
     </div>
   )

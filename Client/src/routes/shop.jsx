@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import NavBar from "../components/NavBar";
-import BookCard from "../components/BookCard";
-import { UserContext } from "../Context/UserContext";
-import { BookContext } from "../Context/BookContext";
+import React, { useContext } from "react"
+import NavBar from "../components/NavBar"
+import BookCard from "../components/BookCard"
+import { UserContext } from "../Context/UserContext"
+import { BookContext } from "../Context/BookContext"
 
 const defaultBooks = [
   {
@@ -24,11 +24,11 @@ const defaultBooks = [
     synopsis: "This is another default book synopsis.",
   },
   // Add more default books as needed
-];
+]
 
 function Shop() {
-  const { currentUser } = useContext(UserContext);
-  const { books } = useContext(BookContext); // Access books from BookContext
+  const { currentUser } = useContext(UserContext)
+  const { books } = useContext(BookContext) // Access books from BookContext
 
   return (
     <div className="flex flex-col w-full min-h-screen bg-cover bg-center">
@@ -51,7 +51,7 @@ function Shop() {
       {/* All Books from the Database */}
       <div className="m-8 mt-2">
         <h2 className="text-lg font-bold mb-2 ml-4">FOR YOU</h2>
-        <section className="grid grid-cols-5 gap-6">
+        <section className="grid grid-cols-4 gap-6">
           {books.length > 0
             ? books.map((book) => <BookCard key={book._id} book={book} />)
             : defaultBooks.map((book) => (
@@ -60,7 +60,7 @@ function Shop() {
         </section>
       </div>
     </div>
-  );
+  )
 }
 
-export default Shop;
+export default Shop

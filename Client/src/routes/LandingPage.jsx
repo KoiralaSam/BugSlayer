@@ -1,10 +1,10 @@
-import book from "../../asset/bookbg.avif";
-import { Outlet } from "react-router";
-import NavBar from "../components/NavBar";
+import book from "../../asset/bookbg.png"
+import { Outlet } from "react-router"
+import NavBar from "../components/NavBar"
 function LandingPage() {
   return (
     <div
-      className="flex flex-col w-full min-h-screen bg-left"
+      className="flex flex-col w-full min-h-screen bg-right"
       style={{ backgroundImage: `url(${book})` }}
     >
       <NavBar />
@@ -23,7 +23,7 @@ function LandingPage() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default LandingPage;
+export default LandingPage
