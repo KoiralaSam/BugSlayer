@@ -1,8 +1,8 @@
-import React, { useContext } from "react"
-import NavBar from "../components/NavBar"
-import BookCard from "../components/BookCard"
-import { UserContext } from "../Context/UserContext"
-import { BookContext } from "../Context/BookContext"
+import React, { useContext } from "react";
+import NavBar from "../components/NavBar";
+import BookCard from "../components/BookCard";
+import { UserContext } from "../Context/UserContext";
+import { BookContext } from "../Context/BookContext";
 
 const defaultBooks = [
   {
@@ -24,12 +24,12 @@ const defaultBooks = [
     synopsis: "This is another default book synopsis.",
   },
   // Add more default books as needed
-]
+];
 
 function Shop() {
-  const { currentUser } = useContext(UserContext)
-  const { books } = useContext(BookContext) // Access books from BookContext
-  console.log(currentUser?.recommended)
+  const { currentUser } = useContext(UserContext);
+  const { books } = useContext(BookContext); // Access books from BookContext
+  console.log(currentUser?.recommended);
   return (
     <div className="flex flex-col w-full min-h-screen bg-cover bg-center">
       <NavBar />
@@ -58,7 +58,7 @@ function Shop() {
         </section>
       </div>
     </div>
-  )
+  );
 }
 
-export default Shop
+export default Shop;
