@@ -39,7 +39,7 @@ function NavBar() {
             <Link to="/sell">Sell</Link>
           </p>
           <p className="font-semibold cursor-pointer hover:underline underline-offset-6">
-            <Link to="/shop">About Us</Link>
+            <Link to="/about">About Us</Link>
           </p>
         </nav>
       </div>

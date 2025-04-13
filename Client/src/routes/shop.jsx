@@ -29,7 +29,7 @@ const defaultBooks = [
 function Shop() {
   const { currentUser } = useContext(UserContext)
   const { books } = useContext(BookContext) // Access books from BookContext
-
+  console.log(currentUser?.recommended)
   return (
     <div className="flex flex-col w-full min-h-screen bg-cover bg-center">
       <NavBar />
