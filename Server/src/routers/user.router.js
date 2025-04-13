@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import express from "express";
 import { User } from "../models/user.js";
 import sharp from "sharp";
@@ -42,11 +41,11 @@ router.post("/user/login", async (req, res) => {
 
 router.get("/user/me", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate("recommended");
-    if (!user) {
-      return res.status(404).send({ error: "User not found" });
-    }
-    res.status(200).send(user); // Send the user data, including recommended books
+    const user = await User.findById(req.user._id)
+      .populate("recommended") // Populate recommended books
+      .populate("cart"); // Populate books in the cart
+
+    res.status(200).send(user);
   } catch (error) {
     res.status(500).send({ error: "Failed to fetch user data" });
   }
@@ -104,5 +103,44 @@ router.post(
     res.status(400).send({ error: error.message });
   }
 );
+
+router.post("/user/cart", auth, async (req, res) => {
+  const { bookId } = req.body;
+
+  try {
+    const user = await User.findById(req.user._id);
+
+    // Check if the book is already in the cart
+    if (user.cart.includes(bookId)) {
+      return res.status(400).send({ error: "Book is already in the cart" });
+    }
+
+    // Add the book to the cart
+    user.cart.push(bookId);
+    await user.save();
+
+    res.status(200).send({ message: "Book added to cart", cart: user.cart });
+  } catch (error) {
+    res.status(500).send({ error: "Failed to add book to cart" });
+  }
+});
+
+router.delete("/user/cart/:bookId", auth, async (req, res) => {
+  const { bookId } = req.params;
+
+  try {
+    const user = await User.findById(req.user._id);
+
+    // Remove the book from the cart
+    user.cart = user.cart.filter((id) => id.toString() !== bookId);
+    await user.save();
+
+    res
+      .status(200)
+      .send({ message: "Book removed from cart", cart: user.cart });
+  } catch (error) {
+    res.status(500).send({ error: "Failed to remove book from cart" });
+  }
+});
 
 export default router;

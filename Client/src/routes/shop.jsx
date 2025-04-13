@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import NavBar from "../components/NavBar";
 import BookCard from "../components/BookCard";
 import { UserContext } from "../Context/UserContext";
-import axios from "axios";
+import { BookContext } from "../Context/BookContext";
 
 const defaultBooks = [
   {
@@ -28,22 +28,7 @@ const defaultBooks = [
 
 function Shop() {
   const { currentUser } = useContext(UserContext);
-  const [allBooks, setAllBooks] = useState([]); // State to store all books
-
-  // Fetch all books from the backend
-  const fetchAllBooks = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/api/books"); // Replace with your backend endpoint
-      setAllBooks(response.data); // Set the fetched books in state
-    } catch (error) {
-      console.error("Error fetching all books:", error);
-    }
-  };
-
-  // Fetch books when the component mounts
-  useEffect(() => {
-    fetchAllBooks();
-  }, []);
+  const { books } = useContext(BookContext); // Access books from BookContext
 
   return (
     <div className="flex flex-col w-full min-h-screen bg-cover bg-center">
@@ -67,8 +52,8 @@ function Shop() {
       <div className="m-8 mt-2">
         <h2 className="text-lg font-bold mb-2 ml-4">FOR YOU</h2>
         <section className="grid grid-cols-5 gap-6">
-          {allBooks.length > 0
-            ? allBooks.map((book) => <BookCard key={book._id} book={book} />)
+          {books.length > 0
+            ? books.map((book) => <BookCard key={book._id} book={book} />)
             : defaultBooks.map((book) => (
                 <BookCard key={book._id} book={book} />
               ))}

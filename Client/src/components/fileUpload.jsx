@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaRegFileImage } from "react-icons/fa";
 
-const FileUpload = () => {
+const FileUpload = ({ onFileUpload }) => {
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState("");
@@ -14,9 +14,11 @@ const FileUpload = () => {
     if (!["image/jpeg", "image/png"].includes(selectedFile.type)) {
       setError("Only JPG and PNG image files are allowed.");
       setFile(null);
+      onFileUpload(null); // Notify parent of invalid file
     } else {
       setFile(selectedFile);
       setError("");
+      onFileUpload(selectedFile); // Notify parent of valid file
     }
   };
 
@@ -38,19 +40,8 @@ const FileUpload = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!file) {
-      setError("Please select an image file before submitting.");
-      return;
-    }
-
-    console.log("Uploading:", file);
-    // You'd normally send the file to a backend here
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto mt-10 p-6">
+    <div className="max-w-xl mx-auto mt-10 p-6">
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -90,16 +81,7 @@ const FileUpload = () => {
           {file.name}
         </div>
       )}
-
-      <div className="flex justify-center mt-6">
-        <button
-          type="submit"
-          className="bg-amber-400 hover:bg-amber-800 text-white font-bold uppercase px-5 py-2 rounded shadow-lg tracking-wide transition-all"
-        >
-          Upload Image
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 

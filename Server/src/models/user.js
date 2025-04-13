@@ -38,6 +38,13 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
+  cart: [
+    {
+      type: mongoose.Schema.Types.ObjectId, // Reference to the Book model
+      ref: "Book",
+    },
+  ],
+
   password: {
     type: String,
     required: true,
@@ -112,73 +119,67 @@ userSchema.statics.findByCredentials = async function (email, password) {
   return user;
 };
 
+userSchema.methods.updateRecommendations = async function () {
+  const user = this;
+  try {
+    // Fetch all books from the database
+    const allBooks = await Book.find();
+
+    // Format the book data for the OpenAI prompt
+    const bookList = allBooks
+      .map(
+        (book) => `${book.title} by ${book.author} (${book.genre.join(", ")})`
+      )
+      .join("\n");
+
+    // Create a prompt for OpenAI
+    const prompt = `
+      Based on the following list of books:
+      ${bookList}
+
+      Recommend 3 books for a user named "${user.name}" who has interacted with books in the past. For each recommendation, provide the following details in JSON format:
+      - Title
+      - Author
+    `;
+
+    // Send the prompt to OpenAI
+    const response = await client.chat.completions.create({
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 500,
+    });
+
+    // Parse the response from OpenAI
+    const recommendations = JSON.parse(response.choices[0]?.message?.content);
+    console.log(recommendations);
+    // Find the recommended books in the database
+    const recommendedBooks = new Set();
+    for (const rec of recommendations) {
+      const book = allBooks.find(
+        (b) =>
+          b.title.toLowerCase() === rec.title.toLowerCase() &&
+          b.author.toLowerCase() === rec.author.toLowerCase()
+      );
+
+      if (book) {
+        recommendedBooks.add(book._id.toString()); // Add unique ObjectId
+      }
+    }
+    user.recommended = Array.from(recommendedBooks); // Convert Set to Array
+  } catch (error) {
+    console.error(
+      "Error generating recommendations with OpenAI:",
+      error.message
+    );
+    // You can choose to proceed without recommendations if there's an error
+  }
+};
+
 userSchema.pre("save", async function (next) {
   const user = this;
+
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
-  }
-  next();
-});
-
-userSchema.pre("save", async function (next) {
-  const user = this;
-
-  // Check if the user data has been modified
-  if (user.isModified()) {
-    try {
-      // Fetch all books from the database
-      const allBooks = await Book.find();
-
-      // Format the book data for the OpenAI prompt
-      const bookList = allBooks
-        .map(
-          (book) => `${book.title} by ${book.author} (${book.genre.join(", ")})`
-        )
-        .join("\n");
-
-      // Create a prompt for OpenAI
-      const prompt = `
-        Based on the following list of books:
-        ${bookList}
-
-        Recommend 5 books for a user named "${user.name}" who has interacted with books in the past. For each recommendation, provide the following details in JSON format:
-        - Title
-        - Author
-      `;
-
-      // Send the prompt to OpenAI
-      const response = await client.chat.completions.create({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 500,
-      });
-
-      // Parse the response from OpenAI
-      const recommendations = JSON.parse(response.choices[0]?.message?.content);
-
-      // Find the recommended books in the database
-      const recommendedBooks = [];
-      for (const rec of recommendations) {
-        const book = allBooks.find(
-          (b) =>
-            b.title.toLowerCase() === rec.title.toLowerCase() &&
-            b.author.toLowerCase() === rec.author.toLowerCase()
-        );
-
-        if (book) {
-          recommendedBooks.push(book._id); // Add the book's ObjectId to the recommended array
-        }
-      }
-
-      // Update the user's recommended array
-      user.recommended = recommendedBooks;
-    } catch (error) {
-      console.error(
-        "Error generating recommendations with OpenAI:",
-        error.message
-      );
-      // You can choose to proceed without recommendations if there's an error
-    }
   }
 
   next();

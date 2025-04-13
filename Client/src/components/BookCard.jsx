@@ -2,14 +2,18 @@ import Book from "../../asset/bookbg.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 
 function BookCard({ book }) {
-  const { title, author, synopsis, price } = book;
+  const { title, author, synopsis, price, avatar } = book;
   return (
     <div className="w-fit p-2 shadow-xl rounded-2xl bg-gray-200 flex flex-col h-full">
-      <img
-        src={Book}
-        alt=""
-        className="rounded-tl-2xl rounded-tr-2xl shadow-md "
-      />
+      {avatar ? (
+        <img
+          src={avatar}
+          alt={`${title} cover`}
+          className="w-full h-40 object-cover mt-2"
+        />
+      ) : (
+        <p className="text-gray-400 italic">No image available</p>
+      )}
       <div className="m-2 flex flex-col items-between h-full">
         <div>
           <div className="flex items-center justify-between">
