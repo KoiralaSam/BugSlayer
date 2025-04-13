@@ -39,7 +39,7 @@ function NavBar() {
             <Link to="/sell">Sell</Link>
           </p>
           <p className="font-semibold cursor-pointer hover:underline underline-offset-6">
-            <Link to="/shop">About Us</Link>
+            <Link to="/about">About Us</Link>
           </p>
         </nav>
       </div>
@@ -62,7 +62,7 @@ function NavBar() {
           {showProfileDropdown && (
             <div className="w-[150px] h-fit bg-white absolute right-0 top-12 rounded-2xl flex flex-col items-center z-100">
               <button className="text-center w-[90%] cursor-pointer py-2 hover:text-red-400">
-                Profile
+                {currentUser.name}
               </button>
               <button className="text-center w-[90%] border-t-1 border-gray-300 cursor-pointer py-2 hover:text-red-400">
                 <Link to="/mycart"> My Cart</Link>

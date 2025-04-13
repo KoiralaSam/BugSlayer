@@ -5,6 +5,7 @@ import Shop from "./routes/shop"
 import LandingPage from "./routes/LandingPage"
 import Sell from "./routes/Sell"
 import MyCart from "./routes/MyCart"
+import AboutUs from "./routes/AboutUs"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/mycart" element={<MyCart />} />
+        <Route path="/about" element={<AboutUs />} />
       </Routes>
     </div>
   )

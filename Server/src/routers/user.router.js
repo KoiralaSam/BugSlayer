@@ -42,11 +42,28 @@ router.post("/user/login", async (req, res) => {
 router.get("/user/me", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id)
-      .populate("recommended") // Populate recommended books
-      .populate("cart"); // Populate books in the cart
+      .populate("recommended")
+      .populate("cart");
 
-    res.status(200).send(user);
+    // Convert avatar buffer to Base64 for each recommended book
+    const recommendedBooks = user.recommended.map((book) => {
+      if (book.avatar) {
+        const bookObject = book.toObject(); // Convert Mongoose document to plain object
+        bookObject.avatar = `data:image/png;base64,${book.avatar.toString(
+          "base64"
+        )}`;
+        return bookObject;
+      }
+      return book; // Return the book as is if no avatar exists
+    });
+
+    // Attach the modified recommended books back to the user object
+    const userWithRecommendations = user.toObject();
+    userWithRecommendations.recommended = recommendedBooks;
+
+    res.status(200).send(userWithRecommendations);
   } catch (error) {
+    console.error("Error fetching user data:", error.message);
     res.status(500).send({ error: "Failed to fetch user data" });
   }
 });
