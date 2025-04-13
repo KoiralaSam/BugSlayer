@@ -121,26 +121,47 @@ userSchema.statics.findByCredentials = async function (email, password) {
 
 userSchema.methods.updateRecommendations = async function () {
   const user = this;
-  try {
-    // Fetch all books from the database
-    const allBooks = await Book.find();
 
-    // Format the book data for the OpenAI prompt
+  try {
+    // Fetch all books the user has interacted with
+    await user.populate("books");
+
+    // Fetch a subset of books for OpenAI to choose from
+    const allBooks = await Book.find({
+      owner: { $ne: user._id }, // Exclude books owned by the current user
+      status: "listed", // Example: Only include books with a specific status
+    }).limit(50); // Limit the number of books to avoid overwhelming OpenAI
+
+    // Format the books for the OpenAI prompt
     const bookList = allBooks
       .map(
-        (book) => `${book.title} by ${book.author} (${book.genre.join(", ")})`
+        (book) =>
+          `- "${book.title}" by ${book.author} (${book.genre.join(", ")})`
       )
       .join("\n");
 
-    // Create a prompt for OpenAI
+    // Format the user's books for the OpenAI prompt
+    const userBooks = user.books
+      .map(
+        (book) =>
+          `- "${book.title}" by ${book.author} (${book.genre.join(", ")})`
+      )
+      .join("\n");
+
+    // Create the OpenAI prompt
     const prompt = `
-      Based on the following list of books:
+      Based on the following list of books a user named "${user.name}" has already read:
+      ${userBooks}
+
+      Choose 3 books from the following list that the user has **not read**, but that align with their preferences:
       ${bookList}
 
-      Recommend 3 books for a user named "${user.name}" who has interacted with books in the past. For each recommendation, provide the following details in JSON format:
-      - Title
-      - Author
+      Respond only with a JSON array of objects, where each object has:
+      - "title": (string)
+      - "author": (string)
     `;
+
+    console.log("Generated Prompt:", prompt);
 
     // Send the prompt to OpenAI
     const response = await client.chat.completions.create({
@@ -149,10 +170,35 @@ userSchema.methods.updateRecommendations = async function () {
       max_tokens: 500,
     });
 
-    // Parse the response from OpenAI
-    const recommendations = JSON.parse(response.choices[0]?.message?.content);
-    console.log(recommendations);
-    // Find the recommended books in the database
+    console.log("Raw OpenAI Response:", response.choices[0]?.message?.content);
+
+    // Sanitize the response
+    let rawResponse = response.choices[0]?.message?.content?.trim();
+
+    // Replace single quotes with double quotes (if necessary)
+    rawResponse = rawResponse.replace(/'/g, '"');
+
+    // Escape unescaped double quotes inside strings
+    rawResponse = rawResponse.replace(/(\w)"(\w)/g, '$1\\"$2');
+
+    // Remove trailing commas (if any)
+    rawResponse = rawResponse.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]");
+
+    // Remove any non-printable or special characters
+    rawResponse = rawResponse.replace(/[^\x20-\x7E]/g, "");
+
+    // Log the sanitized response
+    console.log("Sanitized OpenAI Response:", rawResponse);
+
+    // Validate the response format
+    if (!rawResponse.startsWith("[") || !rawResponse.endsWith("]")) {
+      throw new Error("Invalid JSON format in OpenAI response");
+    }
+
+    // Parse the response
+    const recommendations = JSON.parse(rawResponse);
+
+    // Compare recommendations with books in the database
     const recommendedBooks = new Set();
     for (const rec of recommendations) {
       const book = allBooks.find(
@@ -165,7 +211,10 @@ userSchema.methods.updateRecommendations = async function () {
         recommendedBooks.add(book._id.toString()); // Add unique ObjectId
       }
     }
+
+    // Update the user's recommended array with book IDs
     user.recommended = Array.from(recommendedBooks); // Convert Set to Array
+    await user.save();
   } catch (error) {
     console.error(
       "Error generating recommendations with OpenAI:",
@@ -181,7 +230,6 @@ userSchema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
-
   next();
 });
 
