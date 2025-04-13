@@ -36,10 +36,8 @@ function Shop() {
       {/* Recommendations from UserContext */}
       <div className="m-8 mt-2">
         <h2 className="text-lg font-bold mb-2 ml-4">POPULAR</h2>
-        <section className="grid grid-cols-5 gap-6">
-          {currentUser &&
-          currentUser.recommended &&
-          currentUser.recommended.length > 0 ? (
+        <section className="grid grid-cols-4 gap-6">
+          {currentUser?.recommended?.length > 0 ? (
             currentUser.recommended.map((book) => (
               <BookCard key={book._id} book={book} />
             ))
